@@ -6,7 +6,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RadioTest {
 
-    // ===== ТЕСТЫ НА СТАНЦИИ =====
+    // ===== ТЕСТЫ НА КОНСТРУКТОРЫ =====
+
+    @Test
+    public void testDefaultConstructorStationCount() {
+        Radio radio = new Radio();
+        assertEquals(10, radio.getStationCount());
+    }
+
+    @Test
+    public void testCustomConstructorStationCount() {
+        Radio radio = new Radio(20);
+        assertEquals(20, radio.getStationCount());
+    }
+
+    // ===== ТЕСТЫ НА СТАНЦИИ (10 станций, конструктор по умолчанию) =====
 
     @Test
     public void testSetStation() {
@@ -24,7 +38,7 @@ public class RadioTest {
     }
 
     @Test
-    public void testSetStationAboveNine() {
+    public void testSetStationAboveMax() {
         Radio radio = new Radio();
         radio.setCurrentStation(5);
         radio.setCurrentStation(10);
@@ -39,7 +53,7 @@ public class RadioTest {
     }
 
     @Test
-    public void testSetStationNine() {
+    public void testSetStationMax() {
         Radio radio = new Radio();
         radio.setCurrentStation(9);
         assertEquals(9, radio.getCurrentStation());
@@ -54,7 +68,7 @@ public class RadioTest {
     }
 
     @Test
-    public void testNextStationFromNine() {
+    public void testNextStationFromMax() {
         Radio radio = new Radio();
         radio.setCurrentStation(9);
         radio.next();
@@ -75,6 +89,38 @@ public class RadioTest {
         radio.setCurrentStation(0);
         radio.prev();
         assertEquals(9, radio.getCurrentStation());
+    }
+
+    // ===== ТЕСТЫ НА СТАНЦИИ (кастомное количество станций) =====
+
+    @Test
+    public void testCustomStationCountNextFromMax() {
+        Radio radio = new Radio(5);
+        radio.setCurrentStation(4);
+        radio.next();
+        assertEquals(0, radio.getCurrentStation());
+    }
+
+    @Test
+    public void testCustomStationCountPrevFromZero() {
+        Radio radio = new Radio(5);
+        radio.setCurrentStation(0);
+        radio.prev();
+        assertEquals(4, radio.getCurrentStation());
+    }
+
+    @Test
+    public void testCustomStationCountSetAboveMax() {
+        Radio radio = new Radio(5);
+        radio.setCurrentStation(5);
+        assertEquals(0, radio.getCurrentStation());
+    }
+
+    @Test
+    public void testCustomStationCountSetMax() {
+        Radio radio = new Radio(5);
+        radio.setCurrentStation(4);
+        assertEquals(4, radio.getCurrentStation());
     }
 
     // ===== ТЕСТЫ НА ГРОМКОСТЬ =====
@@ -124,5 +170,16 @@ public class RadioTest {
     public void testInitialVolumeIsZero() {
         Radio radio = new Radio();
         assertEquals(0, radio.getCurrentVolume());
+    }
+
+    // ===== ТЕСТЫ НА ГРОМКОСТЬ С КАСТОМНЫМ КОНСТРУКТОРОМ =====
+
+    @Test
+    public void testCustomRadioVolumeWorks() {
+        Radio radio = new Radio(20);
+        for (int i = 0; i < 50; i++) {
+            radio.increaseVolume();
+        }
+        assertEquals(50, radio.getCurrentVolume());
     }
 }
